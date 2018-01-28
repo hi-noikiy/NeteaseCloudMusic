@@ -1,0 +1,16 @@
+/* 转换UI图像素为css像素 */
+@function ui2css($ui,$dpr:3){
+    @return ($ui / $dpr) * 1px;
+}
+
+/* flex垂直水平居中 */
+@mixin flexCenter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* flex垂直居中 */
+@mixin flexCenterH{
+    display: flex;
+    align-items: center;
+}

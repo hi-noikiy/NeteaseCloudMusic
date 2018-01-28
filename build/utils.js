@@ -54,7 +54,7 @@ exports.cssLoaders = function (options) {
     }
   }
 
-  function resolveResouce(name) {
+  /* function resolveResouce(name) {
     return path.resolve(__dirname, '../src/assets/sass/' + name);
   }
 
@@ -74,7 +74,7 @@ exports.cssLoaders = function (options) {
         loader: 'sass-resources-loader',
         options: {
           // it need a absolute path
-          resources: resolveResouce('var.sass')
+          resources: resolveResouce('base.scss')
         }
       }
     ];
@@ -86,21 +86,29 @@ exports.cssLoaders = function (options) {
     } else {
       return ['vue-style-loader'].concat(loaders)
     }
-  }
+  } */
 
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
-  // return {
-  //   css: generateLoaders(),
-  //   postcss: generateLoaders(),
-  //   less: generateLoaders('less'),
-  //   sass: generateLoaders('sass', { indentedSyntax: true }),
-  //   scss: generateLoaders('sass'),
-  //   stylus: generateLoaders('stylus'),
-  //   styl: generateLoaders('stylus')
-  // }
-
   return {
+    css: generateLoaders(),
+    postcss: generateLoaders(),
+    less: generateLoaders('less'),
+    sass: generateLoaders('sass', { indentedSyntax: true }),
+    /* 全局引入scss */
+    scss: generateLoaders('sass').concat(
+      {
+        loader: 'sass-resources-loader',
+        options: {
+          resources: path.resolve(__dirname, '../src/assets/sass/public.scss')
+        }
+      }
+    ),
+    stylus: generateLoaders('stylus'),
+    styl: generateLoaders('stylus')
+  }
+
+ /*  return {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
@@ -110,7 +118,7 @@ exports.cssLoaders = function (options) {
     scss: generateSassResourceLoader(),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
-  }
+  } */
 }
 
 // Generate loaders for standalone style files (outside of .vue)
