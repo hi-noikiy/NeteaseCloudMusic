@@ -11,14 +11,14 @@ export default {
 <style lang="scss">
 .smallTopic{
     @include flexCenterH;
-    padding-left: ui2css(24);
-    border-left: ui2css(6) solid $baseColor;
-    font-size: ui2css(48);
+    padding-left: .193237rem;
+    border-left: .048309rem solid $baseColor;
+    font-size: .386473rem;
     color: $baseFontColor;
     .iconfont{
         color: $base666Color;
-        font-size: ui2css(42);
-        margin-left: ui2css(30);
+        font-size: .338164rem;
+        margin-left: .241546rem;
     }
 }
 </style>

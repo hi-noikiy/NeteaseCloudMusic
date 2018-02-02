@@ -47,3 +47,8 @@ export default {
   }
 };
 </script>
+<style>
+.video-js{
+  width: 100%;
+}
+</style>

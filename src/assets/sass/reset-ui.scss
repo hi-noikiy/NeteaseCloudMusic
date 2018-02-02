@@ -1,0 +1,26 @@
+/* 按钮 */
+
+.mint-button {
+  height: .917874rem;
+  @include font-dpr(14px);
+}
+
+.mint-button--default {
+  padding: 0;
+  background: #ffffff;
+  border: 3px solid #c9c9ca;
+  box-shadow: none;
+}
+
+.mint-button--default:active {
+    background: #c9c9ca;
+    
+  .mint-button-text {
+    color: #ffffff;
+  }
+}
+.mint-button:not(.is-disabled):active::after{
+    opacity: 0;
+}
+
+

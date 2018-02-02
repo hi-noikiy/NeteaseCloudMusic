@@ -23,8 +23,17 @@ Vue.use(VueVideoPlayer, /* {
 import axios from "axios";
 Vue.prototype.$axios = axios;
 
+import "lib-flexible/flexible.js";
+var rem = document.getElementsByTagName('html');
+// alert(window.devicePixelRatio);
+// alert(rem[0].style.fontSize)
+// import eruda from "eruda";
+// eruda.init();
+
 import apiUrl from "./api/api.config.js";
 Vue.use(apiUrl);
+
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

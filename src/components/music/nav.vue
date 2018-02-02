@@ -1,37 +1,42 @@
 <template>
   <div class="nav">
-      <div class="item" v-for="(nav,index) in navs" :key="index">
-          <template v-if="index == activeNavIndex">
-                <span class="active">{{nav}}</span>
-          </template>
-          <template v-else>
-              <span class="">{{nav}}</span>
-          </template>
-      </div>
+      <span class="item">
+        <router-link to="/findmusic/music">音乐</router-link>
+      </span>
+      <span class="item">
+        <router-link to="/findmusic/mv">视频</router-link>  
+      </span>
+      <span class="item">
+        <router-link to="/findmusic/radio">电台</router-link>   
+      </span>
   </div>
 </template>
 <script>
 export default {
-    data () {
-        return {
-            navs:['音乐',' 视频','电台'],
-            activeNavIndex:'0'
-        }
-    }
-}
+  data() {
+    return {
+    };
+  }
+};
 </script>
 <style lang="scss">
-.nav{
+.nav {
+  display: flex;
+  height: .966184rem;
+  @include font-dpr(14px);
+  background: rgba(#ffffff,.9);
+  .item {
     display: flex;
-    height: ui2css(120);
-    font-size: ui2css(42);
-    .item{
-        flex: 1;
-        @include flexCenter;
+    justify-content: center;
+    flex: 1;
+    a{
+      @include flexCenterH;        
     }
-    .active{
-        color: $baseColor;
-    }
+  }
+  .active {
+      color: $baseColor;
+      border-bottom: .016103rem solid $baseColor;
+  }
 }
 </style>
 

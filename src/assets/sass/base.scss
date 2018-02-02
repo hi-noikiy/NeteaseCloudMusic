@@ -4,7 +4,8 @@ $baseColor:#c4483c;
 $baseFontColor:#323233;
 /* 浅黑色 */
 $base666Color:#666666;
-
+/* 背景灰 */
+$baseBgPrey:#efeff0;
 
 
 
@@ -18,4 +19,8 @@ $base666Color:#666666;
 
 
 /* 组件样式 */
-$headerHeight:ui2css(132);
+/* 头部高度 */
+$headerHeight:1.062802rem;
+/* tabbar */
+$tabbarHeight:1.191626rem;
+$tabbarBg:#383838;

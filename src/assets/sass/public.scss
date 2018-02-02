@@ -6,3 +6,7 @@
 @import 'mixin.scss';
 /* 引入字体 */
 @import '../fonts/iconfont.css';
+/* 引入全局样式 */
+@import "global.scss";
+/* 重置UI样式 */
+@import "reset-ui";

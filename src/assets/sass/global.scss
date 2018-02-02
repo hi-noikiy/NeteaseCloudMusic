@@ -1,0 +1,10 @@
+html,body{
+    height: 100%;
+    @include flexColumn;
+}
+a{
+    &:active,&:hover,&:link,&:visited{
+        color: $baseFontColor;
+        text-decoration: none;
+    }
+}

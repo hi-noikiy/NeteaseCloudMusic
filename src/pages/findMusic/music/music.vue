@@ -1,7 +1,6 @@
 <template>
     <div>
-        <search></search>
-        <mNav></mNav>
+
         <!--  banner -->
         <swiper :options="swiperOption" ref="mySwiper">
             <!-- slides -->
@@ -13,14 +12,13 @@
             <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
         <smallTopic title="推荐歌单" class="smallTopic"></smallTopic>
-        <musicList :musicList="musicSheet"></musicList>
+        <music-sheet :musicList="musicSheet"></music-sheet>
     </div>
 </template>
 <script>
-import search from "@/components/music/search";
-import mNav from "@/components/music/nav";
+
 import smallTopic from "utils/smallTopic/topic";
-import musicList from "utils/musicList/musicList"
+import musicSheet from "utils/musicSheet/musicSheet"
 export default {
   data() {
     return {
@@ -38,20 +36,22 @@ export default {
     };
   },
   components: {
-    search,
-    mNav,
     smallTopic,
-    musicList
+    musicSheet
   },
   created() {
-    this.$axios.get("api/banner").then(res => {
-    //   console.log(res.data.banners);
+    /* 获取banner */
+    this.$axios.get("/api/banner").then(res => {
+      // console.log(res.data.banners);
       this.banner = res.data.banners;
     });
-    this.$axios.get("api/personalized").then(res=>{
-        console.log(res.data.result);
+    /* 获取推荐歌单id */
+    this.$axios.get("/api/personalized").then(res=>{
+        console.log(res);
         this.musicSheet = res.data.result;
         this.musicSheet.map(m=>{
+          var sheetObj = {};
+          
             console.log(m.picUrl)
         })
     })
@@ -65,12 +65,12 @@ export default {
 </script>
 <style lang="scss">
 .swiper-container {
-    margin-bottom: ui2css(51);
+  margin-bottom: ui2css(51);
   .banner {
     width: 100%;
   }
 }
-.smallTopic{
-    margin-bottom: ui2css(45)
+.smallTopic {
+  margin-bottom: ui2css(45);
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
-  <div class="input-wrap">
+  <div class="input-wrap" :class="sty">
       <input type="text" class="input-control">
   </div>
 </template>
 <script>
 export default {
-
+    props:['sty']
 
 }
 </script>
@@ -14,11 +14,12 @@ export default {
     display: flex;
     // width: 306px;
     flex: auto;
-    height: 30px;
+    height: .724638rem;
     >.input-control{
+        @include font-dpr(14px);
         flex: auto;
-        padding:15px;
-        border-radius: 44px;
+        padding-left:.362319rem;
+        border-radius: 1.062802rem;
         border: none;
         outline: none;
     }

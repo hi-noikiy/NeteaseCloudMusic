@@ -2,7 +2,18 @@
 @function ui2css($ui,$dpr:3){
     @return ($ui / $dpr) * 1px;
 }
+/* flexible.js  用px处理文字 */
+@mixin font-dpr($font-size){
+    font-size: $font-size;
 
+    [data-dpr="2"] & {
+        font-size: $font-size * 2;
+    }
+
+    [data-dpr="3"] & {
+        font-size: $font-size * 3;
+    }
+}
 /* flex垂直水平居中 */
 @mixin flexCenter{
     display: flex;
@@ -13,4 +24,10 @@
 @mixin flexCenterH{
     display: flex;
     align-items: center;
+}
+/* flex竖直方向占满全屏 */
+@mixin flexColumn{
+    display: flex;
+    flex: auto;
+    flex-direction: column;
 }
