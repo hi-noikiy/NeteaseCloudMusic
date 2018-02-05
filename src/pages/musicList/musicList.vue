@@ -1,36 +1,45 @@
 <template>
-    <div class="music-list">
+    <div>
         <ncm-header>
           <i class="iconfont icon-you-copy" slot="left"></i>
           歌单
           <i class="iconfont icon-gengduo" slot="right"></i>
           <i class="iconfont icon-zhutu" slot="right"></i>
         </ncm-header>
-        <div class="list-info">
-            <img :src="musicSheetInfo.picUrl" alt="" class='blur-bg blur'>
-            <div class="list-head">
-                <div class="info">
-                    <div class="cover"><img :src="musicSheetInfo.picUrl" alt=""></div>
-                    <div class="at">
-                        <div class="title">{{musicSheetInfo.name}}</div>
-                        <div class="author" v-if="musicSheetInfo.creator">
-                          <img :src="musicSheetInfo.creator.avatarUrl" alt="" class="ava">
-                          {{musicSheetInfo.creator.nickname}} <i class="iconfont icon-you"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="btns">
-                <div class="btn"><i class="iconfont icon-tianjiawenjian"></i><span class="num">36385</span></div>
-                <div class="btn"><i class="iconfont icon-pinglun"></i><span class="num">475</span></div>
-                <div class="btn"><i class="iconfont icon-zhuanfa"></i><span class="num">213</span></div>            
-                <div class="btn"><i class="iconfont icon-xiazai"></i><span class="num">下载</span></div>
-            </div>
+        <div  class="music-list" >
+          <div class="list-info">
+              <img :src="musicSheetInfo.picUrl" alt="" class='blur-bg blur'>
+              <div class="list-head">
+                  <div class="info">
+                      <div class="cover"><img :src="musicSheetInfo.picUrl" alt=""></div>
+                      <div class="at">
+                          <div class="title">{{musicSheetInfo.name}}</div>
+                          <div class="author" v-if="musicSheetInfo.creator">
+                            <img :src="musicSheetInfo.creator.avatarUrl" alt="" class="ava">
+                            {{musicSheetInfo.creator.nickname}} <i class="iconfont icon-you"></i>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="btns">
+                  <div class="btn"><i class="iconfont icon-tianjiawenjian"></i><span class="num">{{musicSheetInfo.subscribedCount}}</span></div>
+                  <div class="btn"><i class="iconfont icon-pinglun"></i><span class="num">{{musicSheetInfo.commentCount}}</span></div>
+                  <div class="btn"><i class="iconfont icon-zhuanfa"></i><span class="num">{{musicSheetInfo.shareCount}}</span></div>            
+                  <div class="btn"><i class="iconfont icon-xiazai"></i><span class="num">下载</span></div>
+              </div>
+          </div>
+          <msDetail :count="musicSheetInfo.trackCount">
+            <msDetailItem v-for="(music,index) in musicSheetInfo.tracks" :key="index" :musicInfo=music>{{index+1}}</msDetailItem>
+            <ncm-loading></ncm-loading>        
+          </msDetail>
         </div>
     </div>
 </template>
 <script>
 import ncmHeader from "utils/header/header";
+import msDetail from "utils/musicSheetDetail/msDetail";
+import msDetailItem from "utils/musicSheetDetail/msDetailItem";
+import ncmLoading from "@/components/base/loading/loading";
 export default {
   data() {
     return {
@@ -39,11 +48,10 @@ export default {
   },
   created() {
     var _this = this;
-
-    // var musicSheetInfo = { picUrl: picUrl};
+  console.log(_this.$route.params.musicListId)
     /*  获取歌单信息 */
     this.$axios
-      .get(`/api/playlist/detail?id=${_this.$route.params.musicListId}`)
+      .get('/api/playlist/detail?id='+_this.$route.params.musicListId)
       .then(res => {
         // console.log(res);
         res = res.data.playlist;
@@ -66,7 +74,10 @@ export default {
       });
   },
   components: {
-    ncmHeader
+    ncmHeader,
+    msDetail,
+    msDetailItem,
+    ncmLoading
   }
 };
 </script>
@@ -103,21 +114,21 @@ export default {
         @include font-dpr(16px);
         line-height: 1.414;
         color: #ffffff;
-        margin-bottom: .531401rem;
+        margin-bottom: 0.531401rem;
       }
       .author {
         @include flexCenterH;
         @include font-dpr(12px);
         color: rgba(#ffffff, 0.6);
-        .ava{
-          width: .724638rem;
-          height: .724638rem;
+        .ava {
+          width: 0.724638rem;
+          height: 0.724638rem;
           overflow: hidden;
           border-radius: 50%;
-          margin-right: .128824rem;
+          margin-right: 0.128824rem;
         }
-        .iconfont{
-          margin-left: .305958rem;
+        .iconfont {
+          margin-left: 0.305958rem;
         }
       }
     }

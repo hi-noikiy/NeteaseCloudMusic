@@ -1,5 +1,5 @@
 <template>
-    <div class="music-sheet">
+    <div class="music-sheet-list">
 
         <div class="music-box" v-for="(music,index) in musicList" :key="index">
             <router-link :to="'/musiclist/'+music.id">
@@ -25,7 +25,7 @@ export default {
 };
 </script>
 <style lang="scss">
-.music-sheet{
+.music-sheet-list{
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
