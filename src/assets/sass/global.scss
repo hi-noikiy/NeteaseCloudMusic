@@ -1,7 +1,9 @@
 html,
 body {
   height: 100%;
-  @include flexColumn;
+  display: flex;
+  flex: auto;
+  flex-direction: column;
 }
 
 a {
@@ -14,8 +16,14 @@ a {
   }
 }
 
+input{
+  outline: none;
+  border: none;
+}
+
+/* 毛玻璃 */
 .blur {
-//   filter: url(blur.svg#blur);
+  //   filter: url(blur.svg#blur);
   /* FireFox, Chrome, Opera */
   -webkit-filter: blur(10px);
   /* Chrome, Opera */

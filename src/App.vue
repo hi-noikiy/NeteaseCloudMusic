@@ -1,7 +1,9 @@
 <template>
-    <div class="main" id="#app">
-      <router-view/>
-    </div>
+  <div class="main" id="#app">
+    <router-view/>
+    <router-view name="tabbar"></router-view>
+
+  </div>
 </template>
 
 <script>
@@ -17,6 +19,8 @@ export default {
 
 <style lang='scss'>
 .main {
-  @include flexColumn;
+  display: flex;
+  flex: auto;
+  flex-direction: column;
 }
 </style>

@@ -1,7 +1,8 @@
 <template>
   <div>
       <router-view/>
-      <ncm-tabbar></ncm-tabbar>
+      <!-- <ncm-tabbar></ncm-tabbar> -->
+      <!-- <router-view name="tabbar"></router-view> -->
   </div>
 </template>
 <script>

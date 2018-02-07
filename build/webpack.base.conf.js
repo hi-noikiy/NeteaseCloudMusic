@@ -29,7 +29,9 @@ const originalConfig = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-      'utils':resolve('src/components/utils')
+      'utils':resolve('src/components/utils'),
+      'pages':resolve('src/pages'),
+      'assets':resolve('src/assets')
     }
   },
   module: {

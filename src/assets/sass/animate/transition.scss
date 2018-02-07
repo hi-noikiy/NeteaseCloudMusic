@@ -1,0 +1,7 @@
+.bot-to-top-enter{
+    transform:translateY(100%);
+}
+.bot-to-top-enter-active{
+    transition: transform .4s;
+    // bottom: 0;
+}
