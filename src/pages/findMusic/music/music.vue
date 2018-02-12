@@ -1,24 +1,23 @@
 <template>
-    <div>
+  <div>
 
-        <!--  banner -->
-        <swiper :options="swiperOption" ref="mySwiper">
-            <!-- slides -->
-            <swiper-slide v-for="(item,index) in banner" :key="index">
-                <img :src='item.pic' alt="" class="banner">
-            </swiper-slide>
+    <!--  banner -->
+    <swiper :options="swiperOption" ref="mySwiper">
+      <!-- slides -->
+      <swiper-slide v-for="(item,index) in banner" :key="index">
+        <img :src='item.pic' alt="" class="banner">
+      </swiper-slide>
 
-            <!-- Optional controls -->
-            <div class="swiper-pagination" slot="pagination"></div>
-        </swiper>
-        <smallTopic title="推荐歌单" class="smallTopic"></smallTopic>
-        <music-sheet :musicList="musicSheet"></music-sheet>
-    </div>
+      <!-- Optional controls -->
+      <div class="swiper-pagination" slot="pagination"></div>
+    </swiper>
+    <smallTopic title="推荐歌单" class="smallTopic"></smallTopic>
+    <music-sheet :musicList="musicSheet"></music-sheet>
+  </div>
 </template>
 <script>
-
 import smallTopic from "utils/smallTopic/topic";
-import musicSheet from "utils/musicSheet/musicSheet"
+import musicSheet from "utils/musicSheet/musicSheet";
 export default {
   data() {
     return {
@@ -32,7 +31,7 @@ export default {
           el: ".swiper-pagination"
         }
       },
-      musicSheet:[]
+      musicSheet: []
     };
   },
   components: {
@@ -46,15 +45,14 @@ export default {
       this.banner = res.data.banners;
     });
     /* 获取推荐歌单id */
-    this.$axios.get("/api/personalized").then(res=>{
-        console.log(res);
-        this.musicSheet = res.data.result;
-        this.musicSheet.map(m=>{
-          var sheetObj = {};
-          
-            console.log(m.picUrl)
-        })
-    })
+    this.$axios.get("/api/personalized").then(res => {
+      console.log(res);
+      this.musicSheet = res.data.result;
+      this.musicSheet.map(m => {
+        var sheetObj = {};
+        console.log(m.picUrl);
+      });
+    });
   },
   computed: {
     swiper() {

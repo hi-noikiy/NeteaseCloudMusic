@@ -33,6 +33,11 @@ export default {
     openLogin() {
       this.isLogin = !this.isLogin;
     }
+  },
+  created () {
+    this.$axios.get('/api/user/subcount').then(res =>{
+      console.log(res)
+    })
   }
 };
 </script>

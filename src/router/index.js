@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import findMusic from '@/pages/findMusic/findMusic';
 import music from "@/pages/findMusic/music/music";
 import mv from "@/pages/findMusic/mv/mv";
+import minemusic from "@/pages/minemusic/minemusic";
 import account from "@/pages/account/account";
 import musicList from "@/pages/musicList/musicList";
 import tabbar from "utils/tabbar/tabbar";
@@ -13,10 +14,10 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: "/",
-    //   redirect: "/findmusic/music"
-    // },
+    {
+      path: "/",
+      redirect: "/findmusic/music"
+    },
     {
       path: "/findmusic",
       components: {
@@ -27,7 +28,7 @@ export default new Router({
     },
     {
       path: '/minemusic',
-      components: { default: account, tabbar: tabbar },
+      components: { default: minemusic, tabbar: tabbar },
     },
     {
       path: '/friend',

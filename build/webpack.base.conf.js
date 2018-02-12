@@ -31,7 +31,8 @@ const originalConfig = {
       '@': resolve('src'),
       'utils':resolve('src/components/utils'),
       'pages':resolve('src/pages'),
-      'assets':resolve('src/assets')
+      'assets':resolve('src/assets'),
+      'base':resolve('src/components/base'),
     }
   },
   module: {

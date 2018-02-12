@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 /* mintui框架 */
 import MintUI from "mint-ui";
 import "mint-ui/lib/style.css";
@@ -35,6 +36,9 @@ var rem = document.getElementsByTagName('html');
 /* 全局js */
 import globaljs from "@/assets/js/base.js";
 Vue.use(globaljs);
+// 引入vue-cookies
+import cookies from "vue-cookies";
+Vue.use(cookies);
 
 
 Vue.config.productionTip = false
@@ -43,6 +47,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

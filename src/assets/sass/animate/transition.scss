@@ -1,3 +1,4 @@
+// 从下到上
 .bot-to-top-enter{
     transform:translateY(100%);
 }
@@ -5,3 +6,6 @@
     transition: transform .4s;
     // bottom: 0;
 }
+
+
+// 展示列表
