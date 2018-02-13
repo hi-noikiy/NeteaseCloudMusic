@@ -1,39 +1,51 @@
 <template>
-    <div>
-        <ncm-header>
-          <i class="iconfont icon-you-copy" slot="left"></i>
-          歌单
-          <i class="iconfont icon-gengduo" slot="right"></i>
-          <i class="iconfont icon-zhutu" slot="right"></i>
-        </ncm-header>
-        <div  class="music-list" >
-          <div class="list-info">
-              <img :src="musicSheetInfo.picUrl" alt="" class='blur-bg blur'>
-              <div class="list-head">
-                  <div class="info">
-                      <div class="cover"><img :src="musicSheetInfo.picUrl" alt=""></div>
-                      <div class="at">
-                          <div class="title">{{musicSheetInfo.name}}</div>
-                          <div class="author" v-if="musicSheetInfo.creator">
-                            <img :src="musicSheetInfo.creator.avatarUrl" alt="" class="ava">
-                            {{musicSheetInfo.creator.nickname}} <i class="iconfont icon-you"></i>
-                          </div>
-                      </div>
-                  </div>
+  <div>
+    <ncm-header>
+      <i class="iconfont icon-you-copy" slot="left"></i>
+      歌单
+      <i class="iconfont icon-gengduo" slot="right"></i>
+      <i class="iconfont icon-zhutu" slot="right"></i>
+    </ncm-header>
+    <div class="music-list">
+      <div class="list-info">
+        <img :src="musicSheetInfo.coverImgUrl" alt="" class='blur-bg blur'>
+        <div class="list-head">
+          <div class="info">
+            <div class="cover"><img :src="musicSheetInfo.coverImgUrl" alt=""></div>
+            <div class="at">
+              <div class="title">{{musicSheetInfo.name}}</div>
+              <div class="author" v-if="musicSheetInfo.creator">
+                <img :src="musicSheetInfo.creator.avatarUrl" alt="" class="ava"> {{musicSheetInfo.creator.nickname}}
+                <i class="iconfont icon-you"></i>
               </div>
-              <div class="btns">
-                  <div class="btn"><i class="iconfont icon-tianjiawenjian"></i><span class="num">{{musicSheetInfo.subscribedCount}}</span></div>
-                  <div class="btn"><i class="iconfont icon-pinglun"></i><span class="num">{{musicSheetInfo.commentCount}}</span></div>
-                  <div class="btn"><i class="iconfont icon-zhuanfa"></i><span class="num">{{musicSheetInfo.shareCount}}</span></div>            
-                  <div class="btn"><i class="iconfont icon-xiazai"></i><span class="num">下载</span></div>
-              </div>
+            </div>
           </div>
-          <msDetail :count="musicSheetInfo.trackCount">
-            <msDetailItem v-for="(music,index) in musicSheetInfo.tracks" :key="index" :musicInfo=music>{{index+1}}</msDetailItem>
-            <ncm-loading></ncm-loading>        
-          </msDetail>
         </div>
+        <div class="btns">
+          <div class="btn">
+            <i class="iconfont icon-tianjiawenjian"></i>
+            <span class="num">{{musicSheetInfo.subscribedCount}}</span>
+          </div>
+          <div class="btn">
+            <i class="iconfont icon-pinglun"></i>
+            <span class="num">{{musicSheetInfo.commentCount}}</span>
+          </div>
+          <div class="btn">
+            <i class="iconfont icon-zhuanfa"></i>
+            <span class="num">{{musicSheetInfo.shareCount}}</span>
+          </div>
+          <div class="btn">
+            <i class="iconfont icon-xiazai"></i>
+            <span class="num">下载</span>
+          </div>
+        </div>
+      </div>
+      <msDetail :count="musicSheetInfo.trackCount">
+        <msDetailItem v-for="(music,index) in tracks" :key="index" :musicInfo=music>{{index+1}}</msDetailItem>
+        <ncm-loading v-show='!tracks.length'></ncm-loading>
+      </msDetail>
     </div>
+  </div>
 </template>
 <script>
 import ncmHeader from "utils/header/header";
@@ -43,22 +55,23 @@ import ncmLoading from "@/components/base/loading/loading";
 export default {
   data() {
     return {
-      musicSheetInfo: {}
+      musicSheetInfo: {},
+      tracks:[]
     };
   },
   created() {
     var _this = this;
-  console.log(_this.$route.params.musicListId)
+    console.log(_this.$route.params.musicListId);
     /*  获取歌单信息 */
     this.$axios
-      .get('/api/playlist/detail?id='+_this.$route.params.musicListId)
+      .get("/api/playlist/detail?id=" + _this.$route.params.musicListId)
       .then(res => {
         // console.log(res);
-        res = res.data.playlist;
-        console.log(res);
+        res = res.data.result;
+        // console.log(res);
         this.musicSheetInfo = _this._pick(res, [
           "id",
-          "picUrl",
+          "coverImgUrl",
           "description",
           "name",
           "playCount",
@@ -66,11 +79,11 @@ export default {
           "subscribedCount",
           "trackCount",
           "tags",
-          "tracks",
           "commentCount",
           "creator"
         ]);
-        console.log(this.musicSheetInfo);
+        this.tracks = res.tracks;
+        console.log(this.tracks);
       });
   },
   components: {

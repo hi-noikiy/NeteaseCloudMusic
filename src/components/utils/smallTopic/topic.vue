@@ -13,7 +13,7 @@ export default {
     @include flexCenterH;
     padding-left: .193237rem;
     border-left: .048309rem solid $baseColor;
-    font-size: .386473rem;
+    @include font-dpr(16px);
     color: $baseFontColor;
     .iconfont{
         color: $base666Color;

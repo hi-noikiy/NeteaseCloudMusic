@@ -47,7 +47,7 @@ export default {
             }
         }
         .music-title{
-            @include font-dpr(12px);
+            @include font-dpr(12px);            
             line-height: .410628rem;
             padding:.144928rem;
             color: $baseFontColor;

@@ -7,7 +7,6 @@
       <swiper-slide v-for="(item,index) in banner" :key="index">
         <img :src='item.pic' alt="" class="banner">
       </swiper-slide>
-
       <!-- Optional controls -->
       <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
@@ -50,7 +49,7 @@ export default {
       this.musicSheet = res.data.result;
       this.musicSheet.map(m => {
         var sheetObj = {};
-        console.log(m.picUrl);
+        // console.log(m.picUrl);
       });
     });
   },

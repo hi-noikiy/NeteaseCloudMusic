@@ -1,24 +1,26 @@
 <template>
-  <div class="login-form">
-    <ncmHeader>手机号登录</ncmHeader>
-    <div class="form">
-      <form action="" onsubmit='return false;'>
-        <div class="ncm-form-control">
-          <i class="iconfont icon-shouji"></i>
-          <input type="text" placeholder="手机号" v-model="phoneNum">
-        </div>
-        <div class="ncm-form-control">
-          <i class="iconfont icon-suo"></i>
-          <input type="password" placeholder="密码" v-model="password">
-        </div>
-        <mt-button size='large' :disabled='disabled' @click="login">登录</mt-button>
-      </form>
+  <transitionRotateY>
+    <div class="login-form">
+      <ncmHeader>手机号登录</ncmHeader>
+      <div class="form">
+        <form action="" onsubmit='return false;'>
+          <div class="ncm-form-control">
+            <i class="iconfont icon-shouji"></i>
+            <input type="text" placeholder="手机号" v-model="phoneNum">
+          </div>
+          <div class="ncm-form-control">
+            <i class="iconfont icon-suo"></i>
+            <input type="password" placeholder="密码" v-model="password">
+          </div>
+          <mt-button size='large' :disabled='disabled' @click="login">登录</mt-button>
+        </form>
+      </div>
     </div>
-
-  </div>
+  </transitionRotateY>
 </template>
 <script>
 import ncmHeader from "utils/header/header";
+import transitionRotateY from "base/transition/leaveRotateY";
 export default {
   data() {
     return {
@@ -27,7 +29,8 @@ export default {
     };
   },
   components: {
-    ncmHeader
+    ncmHeader,
+    transitionRotateY
   },
   computed: {
     disabled() {
@@ -46,7 +49,11 @@ export default {
         .then(res => {
           console.log(res);
           console.log(res.data.profile);
-          sessionStorage.uid = res.data.profile.userId
+          sessionStorage.uid = res.data.profile.userId;
+
+          _this.$router.push({
+            path: "/findmusic/music",
+          });
         });
     },
     formValidata() {}
@@ -55,6 +62,14 @@ export default {
 </script>
 <style lang="scss">
 .login-form {
+  flex: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+  background: #ffffff;
   .form {
     padding: 0.354267rem 0.386473rem 0;
   }
