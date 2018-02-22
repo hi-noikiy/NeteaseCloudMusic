@@ -2,10 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import findMusic from '@/pages/findMusic/findMusic';
-import music from "@/pages/findMusic/music/music";
-import mv from "@/pages/findMusic/mv/mv";
+import musicPages from "@/pages/findMusic/music/music";
+import mvPages from "@/pages/findMusic/mv/mv";
 import minemusic from "@/pages/minemusic/minemusic";
+import friend from "@/pages/friend/friend";
 import account from "@/pages/account/account";
+import music from "@/pages/music/music";
 import musicList from "@/pages/musicList/musicList";
 import tabbar from "utils/tabbar/tabbar";
 import login from "pages/login/login";
@@ -24,7 +26,7 @@ export default new Router({
         default: findMusic,
         tabbar: tabbar,
       },
-      children: [{ path: 'music', component: music }, { path: 'mv', component: mv }, { path: 'radio', component: music }]
+      children: [{ path: 'music', component: musicPages }, { path: 'mv', component: mvPages }, { path: 'radio', component: musicPages }]
     },
     {
       path: '/minemusic',
@@ -32,15 +34,17 @@ export default new Router({
     },
     {
       path: '/friend',
-      components: { default: account, tabbar: tabbar },
+      components: { default: friend, tabbar: tabbar },
     },
     {
       path: '/account',
       components: { default: account, tabbar: tabbar },
     },
     { path: '/musiclist/:musicListId', components: { default: musicList, tabbar: tabbar } },
-    { path: '/login', component:login},
-    { path: '/loginform', component:loginForm},
+    // { path: '/music/:musicId', component: music },
+
+    { path: '/login', component: login },
+    { path: '/loginform', component: loginForm },
   ],
   linkActiveClass: 'active'
 })

@@ -2,17 +2,23 @@
   <div class="main" id="#app">
     <router-view/>
     <router-view name="tabbar"></router-view>
-
+    <player v-show="fullPage"></player>
   </div>
 </template>
 
 <script>
-import findMusic from "@/pages/findMusic/findMusic";
+import player from "pages/music/music";
 import tabbar from "utils/tabbar/tabbar";
+import {mapState} from "vuex";
 export default {
   name: "App",
   components: {
-    findMusic
+    player
+  },
+  computed: {
+    ...mapState([
+      'fullPage'
+    ])
   }
 };
 </script>

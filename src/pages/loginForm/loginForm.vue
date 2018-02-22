@@ -42,17 +42,15 @@ export default {
       var _this = this;
       this.$axios
         .get(
-          `/api/login/cellphone?phone=${_this.phoneNum}&password=${
-            _this.password
-          }`
+          `/api/login/cellphone?phone=${_this.phoneNum}&password=${_this.password}`
         )
         .then(res => {
-          console.log(res);
-          console.log(res.data.profile);
+          // console.log(res);
+          // console.log(res.data.profile);
           sessionStorage.uid = res.data.profile.userId;
 
           _this.$router.push({
-            path: "/findmusic/music",
+            path: "/findmusic/music"
           });
         });
     },

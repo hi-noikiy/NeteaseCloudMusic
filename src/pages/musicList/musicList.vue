@@ -1,75 +1,83 @@
 <template>
-  <div>
-    <ncm-header>
-      <i class="iconfont icon-you-copy" slot="left"></i>
-      歌单
-      <i class="iconfont icon-gengduo" slot="right"></i>
-      <i class="iconfont icon-zhutu" slot="right"></i>
-    </ncm-header>
-    <div class="music-list">
-      <div class="list-info">
-        <img :src="musicSheetInfo.coverImgUrl" alt="" class='blur-bg blur'>
-        <div class="list-head">
-          <div class="info">
-            <div class="cover"><img :src="musicSheetInfo.coverImgUrl" alt=""></div>
-            <div class="at">
-              <div class="title">{{musicSheetInfo.name}}</div>
-              <div class="author" v-if="musicSheetInfo.creator">
-                <img :src="musicSheetInfo.creator.avatarUrl" alt="" class="ava"> {{musicSheetInfo.creator.nickname}}
-                <i class="iconfont icon-you"></i>
+  <transitionRightToLeft>
+    <div class="music-list-wrap">
+      <ncm-header>
+        <i class="iconfont icon-you-copy" slot="left" @click="back"></i>
+        歌单
+        <i class="iconfont icon-gengduo" slot="right"></i>
+        <i class="iconfont icon-zhutu" slot="right"></i>
+      </ncm-header>
+      <div class="music-list">
+        <div class="list-info">
+          <img :src="musicSheetInfo.coverImgUrl" alt="" class='blur-bg blur'>
+          <div class="list-head">
+            <div class="info">
+              <div class="cover"><img :src="musicSheetInfo.coverImgUrl" alt=""></div>
+              <div class="at">
+                <div class="title">{{musicSheetInfo.name}}</div>
+                <div class="author" v-if="musicSheetInfo.creator">
+                  <img :src="musicSheetInfo.creator.avatarUrl" alt="" class="ava"> {{musicSheetInfo.creator.nickname}}
+                  <i class="iconfont icon-you"></i>
+                </div>
               </div>
             </div>
           </div>
+          <div class="btns">
+            <div class="btn">
+              <i class="iconfont icon-tianjiawenjian"></i>
+              <span class="num">{{musicSheetInfo.subscribedCount}}</span>
+            </div>
+            <div class="btn">
+              <i class="iconfont icon-pinglun"></i>
+              <span class="num">{{musicSheetInfo.commentCount}}</span>
+            </div>
+            <div class="btn">
+              <i class="iconfont icon-zhuanfa"></i>
+              <span class="num">{{musicSheetInfo.shareCount}}</span>
+            </div>
+            <div class="btn">
+              <i class="iconfont icon-xiazai"></i>
+              <span class="num">下载</span>
+            </div>
+          </div>
         </div>
-        <div class="btns">
-          <div class="btn">
-            <i class="iconfont icon-tianjiawenjian"></i>
-            <span class="num">{{musicSheetInfo.subscribedCount}}</span>
-          </div>
-          <div class="btn">
-            <i class="iconfont icon-pinglun"></i>
-            <span class="num">{{musicSheetInfo.commentCount}}</span>
-          </div>
-          <div class="btn">
-            <i class="iconfont icon-zhuanfa"></i>
-            <span class="num">{{musicSheetInfo.shareCount}}</span>
-          </div>
-          <div class="btn">
-            <i class="iconfont icon-xiazai"></i>
-            <span class="num">下载</span>
-          </div>
-        </div>
+        <msDetail :count="musicSheetInfo.trackCount">
+          <msDetailItem v-for="(music,index) in tracks" :key="index" :musicInfo=music :index=index :musicListId=musicSheetInfo.id @setListInfo='setListInfo(tracks)'>
+          </msDetailItem>
+          <ncm-loading v-show='!tracks.length'></ncm-loading>
+        </msDetail>
       </div>
-      <msDetail :count="musicSheetInfo.trackCount">
-        <msDetailItem v-for="(music,index) in tracks" :key="index" :musicInfo=music>{{index+1}}</msDetailItem>
-        <ncm-loading v-show='!tracks.length'></ncm-loading>
-      </msDetail>
     </div>
-  </div>
+  </transitionRightToLeft>
 </template>
 <script>
 import ncmHeader from "utils/header/header";
 import msDetail from "utils/musicSheetDetail/msDetail";
 import msDetailItem from "utils/musicSheetDetail/msDetailItem";
 import ncmLoading from "@/components/base/loading/loading";
+
+import transitionRightToLeft from "base/transition/rightToLeft";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
       musicSheetInfo: {},
-      tracks:[]
+      tracks: []
     };
   },
   created() {
     var _this = this;
-    console.log(_this.$route.params.musicListId);
+    // console.log(_this.$route.params.musicListId);
     /*  获取歌单信息 */
     this.$axios
       .get("/api/playlist/detail?id=" + _this.$route.params.musicListId)
       .then(res => {
         // console.log(res);
         res = res.data.result;
+        // console.log("歌单信息:");
         // console.log(res);
-        this.musicSheetInfo = _this._pick(res, [
+        /* 歌单信息 */
+        _this.musicSheetInfo = _this._pick(res, [
           "id",
           "coverImgUrl",
           "description",
@@ -82,20 +90,57 @@ export default {
           "commentCount",
           "creator"
         ]);
-        this.tracks = res.tracks;
-        console.log(this.tracks);
+        /* 歌单全部歌曲信息 */
+        _this.tracks = res.tracks;
+        let ids = [];
+        res.tracks.map(m => {
+          ids.push(m.id);
+        });
+        ids = ids.join(",");
+        return this.$axios.get(`/api/music/url?id=${ids}`);
+      })
+      .then(res => {
+        res.data.data.map((item, index) => {
+          _this.tracks.map((m, i) => {
+            if (item.id == m.id) {
+              Object.assign(m, {
+                url: item.url
+              });
+            }
+          });
+        });
+        console.log(_this.tracks);
       });
   },
   components: {
     ncmHeader,
     msDetail,
     msDetailItem,
-    ncmLoading
+    ncmLoading,
+    transitionRightToLeft
+  },
+  methods: {
+    setListInfo(list) {
+      // console.log(list)
+      this.SET_MUSIC_SEQUENCE(list);
+    },
+    back() {
+      this.$router.go(-1);
+    },
+    ...mapMutations(["SET_MUSIC_SEQUENCE"])
   }
 };
 </script>
 
 <style lang="scss">
+.music-list-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 300;
+}
 .music-list {
   .list-info {
     position: relative;

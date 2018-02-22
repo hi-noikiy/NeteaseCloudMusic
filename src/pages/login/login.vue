@@ -1,19 +1,21 @@
 <template>
-    <transition name="bot-to-top">
-        <div class="login">
-            <img src="~assets/img/timg.jpg" alt="" class="logo">
-            <mt-button size='large'>手机号登录</mt-button>
-            <mt-button size='large'>注册</mt-button>
+  <transition name="bot-to-top">
+    <div class="login-page">
+      <img src="~assets/img/timg.jpg" alt="" class="logo">
+      <router-link to="loginform">
+        <mt-button size='large'>手机号登录</mt-button>
+      </router-link>
+      <mt-button size='large'>注册</mt-button>
 
-        </div>
-    </transition>
+    </div>
+  </transition>
 
 </template>
 <script>
 export default {};
 </script>
 <style lang="scss">
-.login {
+.login-page{
   flex: auto;
   background: #efefef;
   padding: 0 1.086957rem;

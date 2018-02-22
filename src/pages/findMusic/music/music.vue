@@ -47,10 +47,7 @@ export default {
     this.$axios.get("/api/personalized").then(res => {
       console.log(res);
       this.musicSheet = res.data.result;
-      this.musicSheet.map(m => {
-        var sheetObj = {};
-        // console.log(m.picUrl);
-      });
+      this.musicSheet = this.musicSheet.slice(0, 6);
     });
   },
   computed: {

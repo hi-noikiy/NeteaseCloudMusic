@@ -56,19 +56,19 @@ export default {
       this.$axios.get(`/api/user/subcount`).then(res => {
         console.log(res);
       });
-    }
 
-    this.$axios.get(`/api/user/playlist?uid=${uid}`).then(res => {
-      console.log(res);
-      res = res.data.playlist;
-      res.map(m => {
-        if (m.subscribed === false) {
-          _this.creatlist.push(m);
-        } else {
-          _this.collection.push(m);
-        }
+      this.$axios.get(`/api/user/playlist?uid=${uid}`).then(res => {
+        console.log(res);
+        res = res.data.playlist;
+        res.map(m => {
+          if (m.subscribed === false) {
+            _this.creatlist.push(m);
+          } else {
+            _this.collection.push(m);
+          }
+        });
       });
-    });
+    }
   }
 };
 </script>

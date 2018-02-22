@@ -23,6 +23,7 @@ export default {
 .music-sheet {
   background: #fff;
   color: $baseFontColor;
+  padding-bottom: $tabbarHeight;
   .sheet-head {
     height: 1.199678rem;
     display: flex;

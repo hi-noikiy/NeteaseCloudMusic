@@ -14,12 +14,14 @@
     "eruda": "^1.4.2",
     "lib-flexible": "^0.3.2",
     "mint-ui": "^2.2.13",
+    "muse-ui": "^2.1.0",
     "reset.css": "^2.0.2",
     "vant": "^0.12.9",
     "vue": "^2.5.2",
     "vue-awesome-swiper": "^3.1.2",
     "vue-router": "^3.0.1",
     "vue-video-player": "^5.0.1",
+    "vuex": "^3.0.1",
     "vux": "^2.7.8"
   },
   "devDependencies": {

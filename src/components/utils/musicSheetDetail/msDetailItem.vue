@@ -1,12 +1,22 @@
 <template>
-  <div class="music-item">
+  <!-- <router-link :to="`/music/${musicInfo.id}`"> -->
+  <div class="music-item" :class="{playing}" @click="playMusic">
     <div class="index">
-      <slot></slot>
+      <i class="iconfont icon-lababofang" v-if="playing"></i>
+      <template v-else>{{sequenceIndx}} </template>
     </div>
-    <div class="music-box">
+    <div class="music-info">
       <div class="name">
-        <div class="mname">{{musicInfo.name}}</div>
-        <div class="aname">{{musicInfo.album.name}}</div>
+        <div class="mname">
+          {{musicInfo.name}}
+          <span v-if="musicInfo.alias.length >0" class="alias">
+            （
+            <template v-for="alias in musicInfo.alias">{{alias}}</template>）
+          </span>
+        </div>
+        <div class="aname">
+          {{musicInfo.artists | singerName}} - {{musicInfo.album.name}}
+        </div>
       </div>
       <div class="handle">
         <span v-if="!musicInfo.mvid == 0">
@@ -17,13 +27,41 @@
         </span>
       </div>
     </div>
-
   </div>
+  <!-- </router-link> -->
 </template>
 <script>
+import { mapMutations } from "vuex";
+import { mapGetters } from "vuex";
 export default {
-  props: ["musicInfo"],
-  created() {}
+  data() {
+    return {};
+  },
+  props: ["musicInfo", "index", "musicListId"],
+  created() {},
+  methods: {
+    playMusic() {
+      this.$emit("setListInfo");
+      this.OPEN_MUSIC();
+      this.SET_MUSIC_CURRENTINDEX(this.index);
+      this.SET_MUSIC_PLAYING();
+    },
+    ...mapMutations([
+      "OPEN_MUSIC",
+      "SET_MUSIC_SEQUENCE",
+      "SET_MUSIC_CURRENTINDEX",
+      "SET_MUSIC_PLAYING"
+    ])
+  },
+  computed: {
+    sequenceIndx() {
+      return this.index + 1;
+    },
+    playing() {
+      return this.musicInfo.id == this.currentMusic.id;
+    },
+    ...mapGetters(["currentMusic"])
+  }
 };
 </script>
 <style lang="scss">
@@ -39,36 +77,48 @@ export default {
     @include font-dpr(12px);
     color: #979798;
   }
-  .music-box {
+  .music-info {
     flex: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e2e2e3;
-    .name{
-      width: 6.924316rem /* 860/124.2 */;
+    .name {
+      width: 6.924316rem;
       flex: none;
     }
     .mname {
       @include font-dpr(16px);
       @include text-overflow();
       margin-bottom: 0.144928rem;
+      .alias {
+        color: #979798;
+      }
     }
     .aname {
       @include font-dpr(12px);
-      @include text-overflow();      
+      @include text-overflow();
       color: #7d7d7e;
     }
     .iconfont {
       @include font-dpr(16px);
       color: #7d7d7e;
     }
-    .handle{
+    .handle {
       flex: none;
-      span{
-        padding: 0 .241546rem /* 30/124.2 */;
+      span {
+        padding: 0 0.241546rem;
       }
     }
+  }
+}
+.playing {
+  .index {
+    @include font-dpr(18px);
+    color: $baseColor;
+  }
+  .mname {
+    color: $baseColor;
   }
 }
 </style>

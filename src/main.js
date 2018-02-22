@@ -37,8 +37,12 @@ var rem = document.getElementsByTagName('html');
 import globaljs from "@/assets/js/base.js";
 Vue.use(globaljs);
 // 引入vue-cookies
-import cookies from "vue-cookies";
-Vue.use(cookies);
+// import cookies from "vue-cookies";
+// Vue.use(cookies);
+import MuseUI from 'muse-ui'
+import 'muse-ui/dist/muse-ui.css'
+Vue.use(MuseUI)
+
 
 
 Vue.config.productionTip = false
@@ -51,3 +55,17 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+Vue.filter('singerName', function (value) {
+  const arr = [];
+  if (value) {
+    if (value.length >= 1) {
+      value.map(m => {
+        arr.push(m.name);
+      });
+    }
+  }
+
+  return arr.join("/");
+})
+

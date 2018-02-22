@@ -1,7 +1,7 @@
 <template>
     <div class="music-sheet-list">
 
-        <div class="music-box" v-for="(music,index) in musicList" :key="index">
+        <div class="music-sheet-box" v-for="(music,index) in musicList" :key="index">
             <router-link :to="'/musiclist/'+music.id">
                 <div class="music-pic">
                     <img :src="music.picUrl" alt="">  
@@ -29,7 +29,7 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    .music-box{
+    .music-sheet-box{
         position: relative;
         flex-basis: 33%;
         margin-bottom: .193237rem;
@@ -51,6 +51,7 @@ export default {
             line-height: .410628rem;
             padding:.144928rem;
             color: $baseFontColor;
+            text-align: justify;
         }
     }
 }
