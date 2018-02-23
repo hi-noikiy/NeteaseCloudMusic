@@ -1,6 +1,6 @@
 <template>
   <div class="ncm-tabbar">
-    <router-link to="/findmusic"  class="ncm-item">
+    <router-link to="/findmusic/music"  class="ncm-item">
         <div class="icon"><i class="iconfont icon-zhanghao"></i></div>
         <span class="text">发现音乐</span>   
     </router-link>

@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <!--  banner -->
     <swiper :options="swiperOption" ref="mySwiper">
       <!-- slides -->
@@ -59,12 +58,12 @@ export default {
 </script>
 <style lang="scss">
 .swiper-container {
-  margin-bottom: ui2css(51);
+  margin-bottom: .362319rem /* 45/124.2 */;
   .banner {
     width: 100%;
   }
 }
 .smallTopic {
-  margin-bottom: ui2css(45);
+  margin-bottom: .362319rem /* 45/124.2 */;
 }
 </style>

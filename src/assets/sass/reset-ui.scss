@@ -19,3 +19,23 @@
   padding: 0;
   box-shadow: none;
 }
+
+
+/* muse-ui toast */
+.mu-toast{
+  @include font-dpr(14px);
+  height: .652174rem /* 81/124.2 */;
+  line-height: .652174rem /* 81/124.2 */;
+  text-align: center;
+  max-width: none;
+  width: 2.415459rem /* 300/124.2 */;
+}
+@media only screen and (min-width:0) and (max-width:99999px){
+  .mu-toast{
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+  }
+}

@@ -56,16 +56,3 @@ new Vue({
   template: '<App/>'
 })
 
-Vue.filter('singerName', function (value) {
-  const arr = [];
-  if (value) {
-    if (value.length >= 1) {
-      value.map(m => {
-        arr.push(m.name);
-      });
-    }
-  }
-
-  return arr.join("/");
-})
-

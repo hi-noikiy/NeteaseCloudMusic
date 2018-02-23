@@ -5,7 +5,7 @@
     </div>
     <div class="middle">
       <slot></slot>
-      <div v-if=musicTitle>
+      <div v-if=musicTitle class="musicTitle">
         <div class="musicname">
           <slot name="musicname"></slot>
         </div>
@@ -65,13 +65,22 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
+    padding: 0 1.095008rem /* 136/124.2 */;
     @include font-dpr(18px);
+    .musicTitle{
+      width: 100%;
+    }
     .musicname {
       @include font-dpr(15px);
       margin-bottom: 0.112721rem;
+      width: 100%;
+      @include text-overflow();
     }
     .singername {
       @include font-dpr(12px);
+      width: 100%;
+      @include text-overflow();
+      
       .iconfont {
         margin-left: 0.096618rem;
       }

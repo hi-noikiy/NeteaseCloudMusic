@@ -28,10 +28,11 @@
             <span class="m-count-time">{{format(durationTime)}}</span>
           </div>
           <div class="m-btns">
-            <i class="iconfont icon-xunhuan"></i>
-            <i class="iconfont icon-forward2-copy"></i>
+            <i class="iconfont" :class="{'icon-xunhuan':mode == 0,'icon-danquxunhuan':mode == 1,'icon-suijibofang':mode == 2}" @click="changeMode"></i>
+            <mu-toast v-if="toast" :message="toastMsg" @close='hideToast' />
+            <i class="iconfont icon-forward2-copy" @click="prev"></i>
             <i class="iconfont" :class="{'icon-bofang':!playing,'icon-zanting':playing}" @click="play"></i>
-            <i class="iconfont icon-forward2"></i>
+            <i class="iconfont icon-forward2" @click="next"></i>
             <i class="iconfont icon-liebiao1"></i>
           </div>
         </div>
@@ -48,77 +49,53 @@
 import ncmHeader from "utils/header/header";
 import transitionRightToLeft from "base/transition/rightToLeft";
 
-import { mapState } from "vuex";
-import { mapGetters } from "vuex";
-import { mapMutations } from "vuex";
-import { mapActions } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
-      musicId: "",
-      musicInfo: {
-        picUrl: ""
-      },
       currentTime: 0,
       durationTime: 0,
-      musicProgressValue: 0
+      musicProgressValue: 0,
+      toast: false,
+      toastMsg: ""
     };
   },
-  created() {
-    const _this = this;
-    // console.log(this.$route.params);
-    // const musicId = this.$route.params.musicId;
-    console.log(this.playList);
-    if (_this.musicId == "") return;
-    this.$axios
-      .get(`/api/song/detail?ids=${_this.musicId}`)
-      .then(res => {
-        // console.log(res);
-        Object.assign(_this.musicInfo, res.data.songs[0]);
-        // console.log(_this.musicInfo);
-        return _this.$axios.get(`/api/album?id=${res.data.songs[0].al.id}`);
-      })
-      .then(res => {
-        // console.log(res);
-        res = res.data;
-        _this.musicInfo.picUrl = res.album.picUrl;
-      });
-    /*获取音乐url*/
-    this.$axios.get(`/api/music/url?id=${_this.musicId}`).then(res => {
-      console.log(res);
-      res.data;
-    });
-  },
+  created() {},
   components: {
     ncmHeader,
     transitionRightToLeft
   },
-  filters: {
-    musicName(value) {
-      if (value && value.length > 0) {
-        return `（${value.join("")}）`;
-      }
-    }
-  },
   watch: {
-    currentMusic: {
+    startPlaying: {
       deep: true,
-      handler: function() {
-        const _this = this;
-        this.$nextTick(function() {
-          _this.$refs.audio.play();
-        });
+      handler(newval, oldval) {
+        const musicNoChange = newval.currentMusic == oldval.currentMusic;
+        const playing = newval.playing;
+        if ((musicNoChange && playing) || (!musicNoChange && playing)) {
+          const _this = this;
+          this.$nextTick(function() {
+            _this.$refs.audio.play();
+          });
+        }
       }
     },
-    currentTime(){
-      this.musicProgressValue = (Math.round(this.currentTime) / Math.round(this.durationTime)).toFixed(3) * 100
+    currentTime() {
+      this.musicProgressValue =
+        (Math.round(this.currentTime) / Math.round(this.durationTime)).toFixed(
+          3
+        ) * 100;
     }
   },
   computed: {
-    ...mapState(["playList", "fullPage", "playing"]),
-    ...mapGetters({
-      currentMusic: "currentMusic"
-    })
+    startPlaying() {
+      const { currentMusic, playing } = this;
+      return {
+        currentMusic,
+        playing
+      };
+    },
+    ...mapState(["playList", "fullPage", "playing", "mode"]),
+    ...mapGetters(["currentMusic", "nextCurrentIndex", "prevCurrentIndex"])
   },
   methods: {
     play() {
@@ -129,6 +106,28 @@ export default {
         this.$refs.audio.play();
         this.SET_MUSIC_PLAYING();
       }
+    },
+    prev() {
+      this.SET_MUSIC_CURRENTINDEX(this.prevCurrentIndex);
+      this.SET_MUSIC_PLAYING();
+    },
+    next() {
+      this.SET_MUSIC_CURRENTINDEX(this.nextCurrentIndex);
+      this.SET_MUSIC_PLAYING();
+    },
+    changeMode() {
+      const arr = ["列表循环", "单曲播放", "随机播放"];
+      this.SET_MUSIC_PLAYMODE();
+      this.toastMsg = arr[this.mode];
+      this.toast = true;
+      if (this.toastTimer) clearTimeout(this.toastTimer);
+      this.toastTimer = setTimeout(() => {
+        this.toast = false;
+      }, 2000);
+    },
+    hideToast() {
+      this.toast = false;
+      if (this.toastTimer) clearTimeout(this.toastTimer);
     },
     close() {
       this.CLOSE_MUSIC();
@@ -161,9 +160,30 @@ export default {
       "CLOSE_MUSIC",
       "SET_MUSIC_URL",
       "SET_MUSIC_PAUSE",
-      "SET_MUSIC_PLAYING"
+      "SET_MUSIC_PLAYING",
+      "SET_MUSIC_CURRENTINDEX",
+      "SET_MUSIC_PLAYMODE"
     ]),
     ...mapActions(["GET_MUSIC_URL"])
+  },
+  filters: {
+    singerName(value) {
+      const arr = [];
+      if (value) {
+        if (value.length >= 1) {
+          value.map(m => {
+            arr.push(m.name);
+          });
+        }
+      }
+
+      return arr.join("/");
+    },
+    musicName(value) {
+      if (value && value.length > 0) {
+        return `（${value.join("")}）`;
+      }
+    }
   }
 };
 </script>

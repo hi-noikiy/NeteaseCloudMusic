@@ -61,6 +61,20 @@ export default {
       return this.musicInfo.id == this.currentMusic.id;
     },
     ...mapGetters(["currentMusic"])
+  },
+  filters: {
+    singerName(value) {
+      const arr = [];
+      if (value) {
+        if (value.length >= 1) {
+          value.map(m => {
+            arr.push(m.name);
+          });
+        }
+      }
+
+      return arr.join("/");
+    }
   }
 };
 </script>

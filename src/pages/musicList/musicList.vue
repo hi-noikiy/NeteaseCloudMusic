@@ -4,8 +4,9 @@
       <ncm-header>
         <i class="iconfont icon-you-copy" slot="left" @click="back"></i>
         歌单
-        <i class="iconfont icon-gengduo" slot="right"></i>
-        <i class="iconfont icon-zhutu" slot="right"></i>
+        <!-- <i class="iconfont icon-gengduo" slot="right"></i> -->
+        <img src="~assets/img/music-playing.gif" alt="" slot="right" v-if="miniMusicPlaying" @click="open_music">
+        <img src="~assets/img/music-pause.png" alt="" slot="right" v-else-if="miniMusicPause" @click="open_music">
       </ncm-header>
       <div class="music-list">
         <div class="list-info">
@@ -57,7 +58,7 @@ import msDetailItem from "utils/musicSheetDetail/msDetailItem";
 import ncmLoading from "@/components/base/loading/loading";
 
 import transitionRightToLeft from "base/transition/rightToLeft";
-import { mapMutations } from "vuex";
+import { mapMutations,mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -127,7 +128,13 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    ...mapMutations(["SET_MUSIC_SEQUENCE"])
+    open_music(){
+      this.OPEN_MUSIC();
+    },
+    ...mapMutations(["SET_MUSIC_SEQUENCE","OPEN_MUSIC"])
+  },
+  computed: {
+    ...mapGetters(["miniMusicPlaying","miniMusicPause"])
   }
 };
 </script>
@@ -201,12 +208,13 @@ export default {
       flex-direction: column;
       color: #ffffff;
       height: 1.36876rem;
+      padding: .128824rem /* 16/124.2 */ 0;
     }
     .iconfont {
       @include font-dpr(18px);
     }
     .num {
-      opacity: 0.4;
+      opacity: 0.8;
     }
   }
 }
