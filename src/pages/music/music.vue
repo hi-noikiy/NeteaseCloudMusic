@@ -10,8 +10,8 @@
       </ncmHeader>
       <div class="ncm-m-bg"></div>
       <div class="music-wrap">
-        <div class="music-box   m-disc-pause">
-          <div class="music-disc">
+        <div class="music-box" :class="{'m-disc-pause':playing}">
+          <div class="music-disc disc-rotate" :class="{'disc-pause':!playing}">
             <div class="ablum-pic">
               <template v-if="currentMusic.album"><img :src="currentMusic.album.picUrl" alt=""></template>
             </div>
@@ -23,7 +23,7 @@
             <div class="m-progress-wrap">
               <!-- <div class="pro-point"></div>
             <mu-linear-progress mode="determinate" :value="musicProgressValue" /> -->
-              <mu-slider v-model="musicProgressValue" class="demo-slider" />
+              <mu-slider class="demo-slider" v-model="musicProgressValue" @change='setProgress' />
             </div>
             <span class="m-count-time">{{format(durationTime)}}</span>
           </div>
@@ -36,7 +36,7 @@
           </div>
         </div>
         <!-- 音频 -->
-        <audio :src="currentMusic.url" ref="audio" @timeupdate='getCurrentTime'></audio>
+        <audio :src="currentMusic.url" ref="audio" @timeupdate='getCurrentTime' @canplay='musicReady'></audio>
 
       </div>
     </div>
@@ -110,18 +110,11 @@ export default {
         });
       }
     },
-    musicProgressValue(newval){
-
+    currentTime(){
+      this.musicProgressValue = (Math.round(this.currentTime) / Math.round(this.durationTime)).toFixed(3) * 100
     }
   },
   computed: {
-    musicPercent() {
-      return (
-        (Math.round(this.currentTime) / Math.round(this.durationTime)).toFixed(
-          3
-        ) * 100
-      );
-    },
     ...mapState(["playList", "fullPage", "playing"]),
     ...mapGetters({
       currentMusic: "currentMusic"
@@ -142,12 +135,14 @@ export default {
     },
     getCurrentTime(e) {
       this.currentTime = e.target.currentTime;
+    },
+    musicReady() {
       this.durationTime = this.$refs.audio.duration;
     },
     format(value) {
-      const interval = Math.round(value);
-      const minute = this._pad(Math.round(interval / 60));
-      const second = this._pad(Math.round(interval % 60));
+      const interval = Math.floor(value);
+      const minute = this._pad(Math.floor(interval / 60));
+      const second = this._pad(Math.floor(interval % 60));
       return `${minute}:${second}`;
     },
     _pad(num, n = 2) {
@@ -157,6 +152,10 @@ export default {
         len++;
       }
       return num;
+    },
+    setProgress(val) {
+      let newCurrentTime = this.durationTime * (val / 100);
+      this.$refs.audio.currentTime = newCurrentTime;
     },
     ...mapMutations([
       "CLOSE_MUSIC",
@@ -332,6 +331,22 @@ export default {
     align-items: center;
     color: rgba(#fff, 0.4);
     @include font-dpr(46px);
+  }
+}
+
+/* 唱片动画 */
+.disc-rotate {
+  animation: disc-animation 18s linear infinite;
+}
+.disc-pause {
+  animation-play-state: paused;
+}
+@keyframes disc-animation {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

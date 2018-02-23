@@ -6,8 +6,8 @@
         <div class="input">
           <mInput></mInput>
         </div>
-        <img src="~assets/img/music-playing.gif" alt="" slot="right" v-if="miniMusicPlaying">
-        <img src="~assets/img/music-pause.jpg" alt="" slot="right" v-else-if="miniMusicPause">
+        <img src="~assets/img/music-playing.gif" alt="" slot="right" v-if="miniMusicPlaying" @click="open_music">
+        <img src="~assets/img/music-pause.png" alt="" slot="right" v-else-if="miniMusicPause" @click="open_music">
       </mcu-header>
       <mNav></mNav>
     </div>
@@ -22,6 +22,7 @@ import mNav from "@/components/music/nav";
 import music from "./music/music";
 import mv from "./mv/mv";
 import { mapGetters } from "vuex";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -39,6 +40,12 @@ export default {
   },
   computed: {
     ...mapGetters(["miniMusicPlaying", "miniMusicPause"])
+  },
+  methods: {
+    open_music(){
+      this.OPEN_MUSIC();
+    },
+    ...mapMutations(['OPEN_MUSIC'])
   }
 };
 </script>
