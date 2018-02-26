@@ -18,6 +18,12 @@
           </div>
         </div>
         <div class="music-handle-wrap">
+          <div class="m-info-btns">
+            <i class="iconfont icon-shoucang1"></i>
+            <i class="iconfont icon-xiazai2"></i>
+            <i class="iconfont icon-pinglun2" @click="openComments"></i>
+            <i class="iconfont icon-sandian1"></i>
+          </div>
           <div class="m-progress">
             <span class="m-play-time">{{format(currentTime)}}</span>
             <div class="m-progress-wrap">
@@ -27,19 +33,25 @@
             </div>
             <span class="m-count-time">{{format(durationTime)}}</span>
           </div>
+
           <div class="m-btns">
             <i class="iconfont" :class="{'icon-xunhuan':mode == 0,'icon-danquxunhuan':mode == 1,'icon-suijibofang':mode == 2}" @click="changeMode"></i>
             <mu-toast v-if="toast" :message="toastMsg" @close='hideToast' />
-            <i class="iconfont icon-forward2-copy" @click="prev"></i>
+            <i class="iconfont icon-kuaitui" @click="prev"></i>
             <i class="iconfont" :class="{'icon-bofang':!playing,'icon-zanting':playing}" @click="play"></i>
-            <i class="iconfont icon-forward2" @click="next"></i>
-            <i class="iconfont icon-liebiao1"></i>
+            <i class="iconfont icon-kuaijin" @click="next"></i>
+            <i class="iconfont icon-mcaidan" @click="openBottomSheet"></i>
           </div>
         </div>
-        <!-- 音频 -->
-        <audio :src="currentMusic.url" ref="audio" @timeupdate='getCurrentTime' @canplay='musicReady'></audio>
-
       </div>
+      <!-- 音频 -->
+      <audio :src="currentMusic.url" ref="audio" @timeupdate='getCurrentTime' @canplay='musicReady' @ended='musicEnd'></audio>
+      <mu-bottom-sheet :open="bottomSheet" @close='closeBottomSheet'>
+        <bottomSheet @closeBottomSheet='closeBottomSheet'>
+          <bottomSheetItem v-for="(music,index) in playList" :key="index" :music='music'></bottomSheetItem>
+        </bottomSheet>
+      </mu-bottom-sheet>
+      <!-- <comments v-if="comment" @closeComments='closeComments' :commentsId='currentMusic.id'></comments> -->
     </div>
     <!-- </div> -->
   </transitionRightToLeft>
@@ -48,7 +60,9 @@
 <script>
 import ncmHeader from "utils/header/header";
 import transitionRightToLeft from "base/transition/rightToLeft";
-
+import bottomSheet from "utils/bottomSheet/bottomSheet";
+import bottomSheetItem from "utils/bottomSheet/bottomSheetItem";
+import comments from "pages/comment/comment";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   data() {
@@ -57,13 +71,17 @@ export default {
       durationTime: 0,
       musicProgressValue: 0,
       toast: false,
-      toastMsg: ""
+      toastMsg: "",
+      bottomSheet: false,
+      comment: false
     };
   },
-  created() {},
   components: {
     ncmHeader,
-    transitionRightToLeft
+    transitionRightToLeft,
+    bottomSheet,
+    bottomSheetItem,
+    comments
   },
   watch: {
     startPlaying: {
@@ -116,21 +134,27 @@ export default {
       this.SET_MUSIC_PLAYING();
     },
     changeMode() {
+      const _this = this;
       const arr = ["列表循环", "单曲播放", "随机播放"];
       this.SET_MUSIC_PLAYMODE();
+      this.SET_MUSIC_SEQUENCE(_this.setSequence(_this.mode));
       this.toastMsg = arr[this.mode];
       this.toast = true;
       if (this.toastTimer) clearTimeout(this.toastTimer);
       this.toastTimer = setTimeout(() => {
         this.toast = false;
-      }, 2000);
+      }, 1000);
     },
     hideToast() {
       this.toast = false;
       if (this.toastTimer) clearTimeout(this.toastTimer);
     },
+    musicEnd() {
+      this.next();
+    },
     close() {
       this.CLOSE_MUSIC();
+      this.SET_PAGE_FIXED(false);
     },
     getCurrentTime(e) {
       this.currentTime = e.target.currentTime;
@@ -156,13 +180,40 @@ export default {
       let newCurrentTime = this.durationTime * (val / 100);
       this.$refs.audio.currentTime = newCurrentTime;
     },
+    setSequence(mode, list = this.playList) {
+      let newlist = list.slice(0);
+      if (mode == 0) {
+        return newlist;
+      } else if (mode == 1) {
+        return this.currentMusic;
+      } else if (mode == 2) {
+        newlist.sort(function() {
+          return Math.random() - 0.5;
+        });
+        return newlist;
+      }
+    },
+    openBottomSheet() {
+      this.bottomSheet = true;
+    },
+    closeBottomSheet() {
+      this.bottomSheet = false;
+    },
+    openComments() {
+      this.comment = true;
+    },
+    closeComments() {
+      this.comment = false;
+    },
     ...mapMutations([
       "CLOSE_MUSIC",
       "SET_MUSIC_URL",
       "SET_MUSIC_PAUSE",
       "SET_MUSIC_PLAYING",
       "SET_MUSIC_CURRENTINDEX",
-      "SET_MUSIC_PLAYMODE"
+      "SET_MUSIC_PLAYMODE",
+      "SET_MUSIC_SEQUENCE",
+      "SET_PAGE_FIXED"
     ]),
     ...mapActions(["GET_MUSIC_URL"])
   },
@@ -345,12 +396,38 @@ export default {
       background: $baseColor;
     }
   }
-  .m-btns {
+
+  .m-btns,
+  .m-info-btns {
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: rgba(#fff, 0.4);
-    @include font-dpr(46px);
+    .icon-bofang,
+    .icon-zanting {
+      @include font-dpr(46px);
+    }
+    .icon-kuaitui,
+    .icon-kuaijin {
+      @include font-dpr(25px);
+    }
+    .icon-danquxunhuan,
+    .icon-xunhuan,
+    .icon-suijibofang,
+    .icon-mcaidan {
+      @include font-dpr(20px);
+    }
+  }
+  .m-info-btns {
+    padding: 0 1.207729rem;
+    margin-bottom: 0.402576rem;
+    .icon-shoucang1,
+    .icon-shoucang2,
+    .icon-pinglun2,
+    .icon-xiazai2,
+    .icon-sandian1 {
+      @include font-dpr(19px);
+    }
   }
 }
 

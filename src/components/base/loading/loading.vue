@@ -1,6 +1,6 @@
 <template>
   <div class="ncm-loading">
-      <div class="icon"></div>
+    <img src="~assets/img/music-playing2.gif" alt="">
       <div class="text">{{text}}</div>
   </div>
 </template>
@@ -18,7 +18,11 @@ export default {
 .ncm-loading {
   display: flex;
   justify-content: center;
+  align-items:center;
   margin-top: .805153rem;
+  img{
+    margin-right:.120773rem;
+  }
   .text {
     @include font-dpr(14px);
     color: $baseFontColor;

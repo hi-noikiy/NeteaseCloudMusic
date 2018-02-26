@@ -42,7 +42,7 @@ export default {
   height: $headerHeight;
   // background: $baseColor;
   color: #ffffff;
-
+  flex: none;
   .btns {
     position: relative;
     z-index: 10;
@@ -52,9 +52,9 @@ export default {
       @include font-dpr(22px);
       margin: 0.281804rem;
     }
-    img{
-      width: .644122rem /* 80/124.2 */;
-      margin:0 0.281804rem;
+    img {
+      width: 0.644122rem;
+      margin: 0 0.281804rem;
     }
   }
   .middle {
@@ -65,9 +65,9 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    padding: 0 1.095008rem /* 136/124.2 */;
+    padding: 0 1.095008rem;
     @include font-dpr(18px);
-    .musicTitle{
+    .musicTitle {
       width: 100%;
     }
     .musicname {
@@ -80,7 +80,7 @@ export default {
       @include font-dpr(12px);
       width: 100%;
       @include text-overflow();
-      
+
       .iconfont {
         margin-left: 0.096618rem;
       }

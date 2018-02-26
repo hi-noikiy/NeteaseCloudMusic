@@ -1,6 +1,6 @@
 <template>
   <transitionRightToLeft>
-    <div class="music-list-wrap">
+    <div class="music-list-wrap" :class="{'fixed':pageFixed}">
       <ncm-header>
         <i class="iconfont icon-you-copy" slot="left" @click="back"></i>
         歌单
@@ -58,12 +58,12 @@ import msDetailItem from "utils/musicSheetDetail/msDetailItem";
 import ncmLoading from "@/components/base/loading/loading";
 
 import transitionRightToLeft from "base/transition/rightToLeft";
-import { mapMutations,mapGetters } from "vuex";
+import { mapMutations, mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
       musicSheetInfo: {},
-      tracks: []
+      tracks: [],
     };
   },
   created() {
@@ -73,10 +73,7 @@ export default {
     this.$axios
       .get("/api/playlist/detail?id=" + _this.$route.params.musicListId)
       .then(res => {
-        // console.log(res);
         res = res.data.result;
-        // console.log("歌单信息:");
-        // console.log(res);
         /* 歌单信息 */
         _this.musicSheetInfo = _this._pick(res, [
           "id",
@@ -110,7 +107,6 @@ export default {
             }
           });
         });
-        console.log(_this.tracks);
       });
   },
   components: {
@@ -121,20 +117,32 @@ export default {
     transitionRightToLeft
   },
   methods: {
-    setListInfo(list) {
-      // console.log(list)
-      this.SET_MUSIC_SEQUENCE(list);
+    setListInfo(list = this.tracks) {
+      let newlist = list.slice(0);
+      this.SET_MUSIC_PLAYLIST(list);
+      if (this.mode == 0) {
+        console.log(newlist)
+        this.SET_MUSIC_SEQUENCE(newlist);
+      } else if (this.mode == 1) {
+        this.SET_MUSIC_SEQUENCE(newlist[this.currentIndex]);
+      } else if (this.mode == 2) {
+        newlist.sort(function() {
+          return Math.random() - 0.5;
+        });
+        this.SET_MUSIC_SEQUENCE(newlist);
+      }
     },
     back() {
       this.$router.go(-1);
     },
-    open_music(){
+    open_music() {
       this.OPEN_MUSIC();
     },
-    ...mapMutations(["SET_MUSIC_SEQUENCE","OPEN_MUSIC"])
+    ...mapMutations(["SET_MUSIC_PLAYLIST", "OPEN_MUSIC", "SET_MUSIC_SEQUENCE"])
   },
   computed: {
-    ...mapGetters(["miniMusicPlaying","miniMusicPause"])
+    ...mapGetters(["miniMusicPlaying", "miniMusicPause"]),
+    ...mapState(["mode", "currentIndex","pageFixed"])
   }
 };
 </script>
@@ -147,6 +155,10 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 300;
+}
+.fixed{
+  position: fixed;
+  width: 100%;
 }
 .music-list {
   .list-info {
@@ -208,7 +220,7 @@ export default {
       flex-direction: column;
       color: #ffffff;
       height: 1.36876rem;
-      padding: .128824rem /* 16/124.2 */ 0;
+      padding: 0.128824rem 0;
     }
     .iconfont {
       @include font-dpr(18px);

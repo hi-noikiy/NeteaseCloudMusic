@@ -41,16 +41,18 @@ export default {
   created() {},
   methods: {
     playMusic() {
+      this.SET_MUSIC_CURRENTINDEX(this.index);      
       this.$emit("setListInfo");
       this.OPEN_MUSIC();
-      this.SET_MUSIC_CURRENTINDEX(this.index);
+      this.SET_PAGE_FIXED(true);
       this.SET_MUSIC_PLAYING();
     },
     ...mapMutations([
       "OPEN_MUSIC",
-      "SET_MUSIC_SEQUENCE",
+      "SET_MUSIC_PLAYLIST",
       "SET_MUSIC_CURRENTINDEX",
-      "SET_MUSIC_PLAYING"
+      "SET_MUSIC_PLAYING",
+      "SET_PAGE_FIXED"
     ])
   },
   computed: {
