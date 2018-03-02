@@ -43,7 +43,7 @@
           </div>
         </div>
         <msDetail :count="musicSheetInfo.trackCount">
-          <msDetailItem v-for="(music,index) in tracks" :key="index" :musicInfo=music :index=index :musicListId=musicSheetInfo.id @setListInfo='setListInfo(tracks)'>
+          <msDetailItem v-for="(music,index) in tracks" :key="index" :musicInfo=music :index=index :musicListId=musicSheetInfo.id @setListInfo='setListInfo'>
           </msDetailItem>
           <ncm-loading v-show='!tracks.length'></ncm-loading>
         </msDetail>
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       musicSheetInfo: {},
-      tracks: [],
+      tracks: []
     };
   },
   created() {
@@ -120,13 +120,11 @@ export default {
     setListInfo(list = this.tracks) {
       let newlist = list.slice(0);
       this.SET_MUSIC_PLAYLIST(list);
-      if (this.mode == 0) {
-        console.log(newlist)
+      if (this.mode == 0 || this.mode == 1) {
+        // console.log(newlist)
         this.SET_MUSIC_SEQUENCE(newlist);
-      } else if (this.mode == 1) {
-        this.SET_MUSIC_SEQUENCE(newlist[this.currentIndex]);
       } else if (this.mode == 2) {
-        newlist.sort(function() {
+        newlist.sort(function(a, b) {
           return Math.random() - 0.5;
         });
         this.SET_MUSIC_SEQUENCE(newlist);
@@ -136,13 +134,18 @@ export default {
       this.$router.go(-1);
     },
     open_music() {
-      this.OPEN_MUSIC();
+      this.OPEN_MUSIC(true);
     },
-    ...mapMutations(["SET_MUSIC_PLAYLIST", "OPEN_MUSIC", "SET_MUSIC_SEQUENCE"])
+    ...mapMutations([
+      "SET_MUSIC_PLAYLIST",
+      "OPEN_MUSIC",
+      "SET_MUSIC_SEQUENCE",
+      "RANDOM_MUSIC_SEQUENCE"
+    ])
   },
   computed: {
     ...mapGetters(["miniMusicPlaying", "miniMusicPause"]),
-    ...mapState(["mode", "currentIndex","pageFixed"])
+    ...mapState(["mode", "currentIndex", "pageFixed"])
   }
 };
 </script>
@@ -156,7 +159,7 @@ export default {
   height: 100%;
   z-index: 300;
 }
-.fixed{
+.fixed {
   position: fixed;
   width: 100%;
 }

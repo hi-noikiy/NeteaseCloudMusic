@@ -31,8 +31,7 @@
   <!-- </router-link> -->
 </template>
 <script>
-import { mapMutations } from "vuex";
-import { mapGetters } from "vuex";
+import { mapMutations,mapGetters,mapState } from "vuex";
 export default {
   data() {
     return {};
@@ -41,18 +40,21 @@ export default {
   created() {},
   methods: {
     playMusic() {
-      this.SET_MUSIC_CURRENTINDEX(this.index);      
-      this.$emit("setListInfo");
-      this.OPEN_MUSIC();
+      const _this = this;
+      this.CLEAR_SEQUENCE_LIST();
+      this.SET_MUSIC_CURRENTID(_this.musicInfo.id);      
+      this.$emit("setListInfo");      
+      this.OPEN_MUSIC(true);
       this.SET_PAGE_FIXED(true);
-      this.SET_MUSIC_PLAYING();
+      this.SET_MUSIC_PLAYING(true);
     },
     ...mapMutations([
       "OPEN_MUSIC",
       "SET_MUSIC_PLAYLIST",
-      "SET_MUSIC_CURRENTINDEX",
+      "SET_MUSIC_CURRENTID",
       "SET_MUSIC_PLAYING",
-      "SET_PAGE_FIXED"
+      "SET_PAGE_FIXED",
+      "CLEAR_SEQUENCE_LIST"
     ])
   },
   computed: {
@@ -60,8 +62,11 @@ export default {
       return this.index + 1;
     },
     playing() {
-      return this.musicInfo.id == this.currentMusic.id;
+      if (this.currentMusic) {
+        return this.musicInfo.id == this.currentMusic.id;
+      }
     },
+    ...mapState(["currentMusicID"]),
     ...mapGetters(["currentMusic"])
   },
   filters: {
